@@ -7,6 +7,7 @@ import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./Register.module.css";
+import Spiner from "../../components/Spiner/Spiner";
 
 const Register = () => {
 	const [inputData, setInputData] = useState({
@@ -21,6 +22,9 @@ const Register = () => {
 	const [status, setStatus] = useState(null);
 	const [image, setImage] = useState("");
 	const [preview, setPreview] = useState("");
+
+	// Spinner will be shown while we fetch the data
+	const [showSpin, setShowSpin] = useState(true);
 
 	// Input Handler Function
 	const inputHandler = (e) => {
@@ -49,6 +53,9 @@ const Register = () => {
 		if (image) {
 			setPreview(URL.createObjectURL(image));
 		}
+		setTimeout(() => {
+			setShowSpin(false);
+		}, 1200);
 	}, [image]);
 
 	// Submit Handler Function
@@ -89,108 +96,142 @@ const Register = () => {
 
 	return (
 		<>
-			<div className="container">
-				<h2 className="text-center mt-2">Register Your Details</h2>
-				<Card className="shadow mt-3 p-3">
-					<div className={`text-center mb-3 ` + styles["profile_div"]}>
-						<img src={preview ? preview : `/man.png`} alt="img"></img>
+			{showSpin ? (
+				<Spiner />
+			) : (
+				!showSpin && (
+					<div className="container">
+						<h2 className="text-center mt-2">Register Your Details</h2>
+						<Card className="shadow mt-3 p-3">
+							<div className={`text-center mb-3 ` + styles["profile_div"]}>
+								<img src={preview ? preview : `/man.png`} alt="img"></img>
+							</div>
+							<Form>
+								<Row>
+									{/* col-lg-6 will make our column occupy half the width of the entire row */}
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>First Name</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter First Name"
+											name="fname"
+											onChange={inputHandler}
+											value={inputData.fname}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Last Name</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter Last Name"
+											name="lname"
+											onChange={inputHandler}
+											value={inputData.lname}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Email address</Form.Label>
+										<Form.Control
+											type="email"
+											placeholder="Enter email"
+											name="email"
+											onChange={inputHandler}
+											value={inputData.email}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Mobile No.</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter Mobile Number"
+											name="mobile"
+											onChange={inputHandler}
+											value={inputData.mobile}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Select Gender</Form.Label>
+										<Form.Check
+											type="radio"
+											label="Male"
+											name="gender"
+											value="Male"
+											onChange={inputHandler}
+										/>
+										<Form.Check
+											type="radio"
+											label="Female"
+											name="gender"
+											value="Female"
+											onChange={inputHandler}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Select Status</Form.Label>
+										<Select
+											options={options}
+											onChange={statusHandler}
+											defaultValue={options[0]}
+											value={status}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Select Your Profile Image</Form.Label>
+										<Form.Control
+											type="file"
+											placeholder="Upload Your File"
+											name="user_profile"
+											onChange={imageHandler}
+										/>
+									</Form.Group>
+									<Form.Group
+										className="mb-3 col-lg-6"
+										controlId="formBasicEmail"
+									>
+										<Form.Label>Enter Your Location</Form.Label>
+										<Form.Control
+											type="location"
+											placeholder="Enter Location"
+											name="location"
+											onChange={inputHandler}
+											value={inputData.location}
+										/>
+									</Form.Group>
+									<Button
+										variant="primary"
+										type="submit"
+										onClick={submitHandler}
+									>
+										Submit
+									</Button>
+								</Row>
+							</Form>
+						</Card>
+						<ToastContainer position="top-center" />
 					</div>
-					<Form>
-						<Row>
-							{/* col-lg-6 will make our column occupy half the width of the entire row */}
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>First Name</Form.Label>
-								<Form.Control
-									type="text"
-									placeholder="Enter First Name"
-									name="fname"
-									onChange={inputHandler}
-									value={inputData.fname}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Last Name</Form.Label>
-								<Form.Control
-									type="text"
-									placeholder="Enter Last Name"
-									name="lname"
-									onChange={inputHandler}
-									value={inputData.lname}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Email address</Form.Label>
-								<Form.Control
-									type="email"
-									placeholder="Enter email"
-									name="email"
-									onChange={inputHandler}
-									value={inputData.email}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Mobile No.</Form.Label>
-								<Form.Control
-									type="text"
-									placeholder="Enter Mobile Number"
-									name="mobile"
-									onChange={inputHandler}
-									value={inputData.mobile}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Select Gender</Form.Label>
-								<Form.Check
-									type="radio"
-									label="Male"
-									name="gender"
-									value="Male"
-									onChange={inputHandler}
-								/>
-								<Form.Check
-									type="radio"
-									label="Female"
-									name="gender"
-									value="Female"
-									onChange={inputHandler}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Select Status</Form.Label>
-								<Select
-									options={options}
-									onChange={statusHandler}
-									defaultValue={options[0]}
-									value={status}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Select Your Profile Image</Form.Label>
-								<Form.Control
-									type="file"
-									placeholder="Upload Your File"
-									name="user_profile"
-									onChange={imageHandler}
-								/>
-							</Form.Group>
-							<Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
-								<Form.Label>Enter Your Location</Form.Label>
-								<Form.Control
-									type="location"
-									placeholder="Enter Location"
-									name="location"
-									onChange={inputHandler}
-									value={inputData.location}
-								/>
-							</Form.Group>
-							<Button variant="primary" type="submit" onClick={submitHandler}>
-								Submit
-							</Button>
-						</Row>
-					</Form>
-				</Card>
-				<ToastContainer position="top-center" />
-			</div>
+				)
+			)}
 		</>
 	);
 };
