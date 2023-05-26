@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import styles from "./Home.module.css";
@@ -6,6 +6,8 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Tables from "../../components/Tables/Tables";
 import Spiner from "../../components/Spiner/Spiner";
 import { useNavigate } from "react-router-dom";
+import { addData } from "../../components/Context/ContextProvider";
+import Alert from "react-bootstrap/Alert";
 
 const Home = () => {
 	const navigate = useNavigate();
@@ -14,6 +16,8 @@ const Home = () => {
 	const addUser = () => {
 		navigate("/register");
 	};
+
+	const { userAdd, setUserAdd } = useContext(addData);
 
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
@@ -27,6 +31,13 @@ const Home = () => {
 
 	return (
 		<>
+			{userAdd ? (
+				<Alert variant="success" onClose={() => setUserAdd("")} dismissible>
+					{`${userAdd.fname} Successfully Added`}
+				</Alert>
+			) : (
+				""
+			)}
 			<div className="container">
 				<div className="main_div">
 					{/* Search - Add buttons */}

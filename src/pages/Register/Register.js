@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { registerFunction } from "../../services/Apis";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./Register.module.css";
 import Spiner from "../../components/Spiner/Spiner";
+import { addData } from "../../components/Context/ContextProvider";
 
 const Register = () => {
 	const [inputData, setInputData] = useState({
@@ -22,6 +25,8 @@ const Register = () => {
 	const [status, setStatus] = useState(null);
 	const [image, setImage] = useState("");
 	const [preview, setPreview] = useState("");
+
+	const navigate = useNavigate();
 
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
@@ -58,8 +63,10 @@ const Register = () => {
 		}, 1200);
 	}, [image]);
 
+	const { userAdd, setUserAdd } = useContext(addData);
+
 	// Submit Handler Function
-	const submitHandler = (e) => {
+	const submitHandler = async (e) => {
 		e.preventDefault();
 
 		const { fname, lname, email, mobile, gender, location } = inputData;
@@ -84,7 +91,39 @@ const Register = () => {
 		} else if (location === "") {
 			toast.error("Location is required");
 		} else {
-			toast.success("User Successfully Registered");
+			const data = new FormData();
+			data.append("fname", fname);
+			data.append("lname", lname);
+			data.append("email", email);
+			data.append("mobile", mobile);
+			data.append("gender", gender);
+			data.append("status", status);
+
+			data.append("user_profile", image);
+			data.append("location", location);
+
+			const config = {
+				"Content-Type": "multipart/form-data",
+			};
+
+			const response = await registerFunction(data, config);
+			if (response.status === 200) {
+				setInputData({
+					...inputData,
+					fname: "",
+					lname: "",
+					email: "",
+					mobile: "",
+					gender: "",
+					location: "",
+				});
+				setImage("");
+				setStatus("");
+				setUserAdd(response.data);
+				navigate("/");
+			} else {
+				toast.error("Error!");
+			}
 		}
 	};
 
@@ -189,8 +228,8 @@ const Register = () => {
 										<Select
 											options={options}
 											onChange={statusHandler}
-											defaultValue={options[0]}
-											value={status}
+											// defaultValue={options[0]}
+											// value={status}
 										/>
 									</Form.Group>
 									<Form.Group
