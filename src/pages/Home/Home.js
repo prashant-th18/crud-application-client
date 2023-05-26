@@ -6,10 +6,16 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Tables from "../../components/Tables/Tables";
 import Spiner from "../../components/Spiner/Spiner";
 import { useNavigate } from "react-router-dom";
-import { addData } from "../../components/Context/ContextProvider";
+import { addData, updateData } from "../../components/Context/ContextProvider";
 import Alert from "react-bootstrap/Alert";
+import { NavLink } from "react-router-dom";
+import { userDetailsFunction } from "../../services/Apis";
 
 const Home = () => {
+	const [usersData, setUsersData] = useState([]);
+
+	console.log(usersData);
+
 	const navigate = useNavigate();
 
 	// addUser Click Handler
@@ -18,12 +24,19 @@ const Home = () => {
 	};
 
 	const { userAdd, setUserAdd } = useContext(addData);
+	const { userUpdate, setUserUpdate } = useContext(updateData);
 
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
 
+	const getUsersData = async () => {
+		const getData = await userDetailsFunction();
+		setUsersData(getData.data);
+	};
+
 	// Temporary
 	useEffect(() => {
+		getUsersData();
 		setTimeout(() => {
 			setShowSpin(false);
 		}, 1200);
@@ -31,12 +44,15 @@ const Home = () => {
 
 	return (
 		<>
-			{userAdd ? (
+			{userAdd && (
 				<Alert variant="success" onClose={() => setUserAdd("")} dismissible>
 					{`${userAdd.fname} Successfully Added`}
 				</Alert>
-			) : (
-				""
+			)}
+			{userUpdate && (
+				<Alert variant="primary" onClose={() => setUserUpdate("")} dismissible>
+					{`${userUpdate.fname} Successfully Added`}
+				</Alert>
 			)}
 			<div className="container">
 				<div className="main_div">
@@ -155,7 +171,7 @@ const Home = () => {
 					</div>
 				</div>
 				{showSpin && <Spiner />}
-				{!showSpin && <Tables />}
+				{!showSpin && <Tables usersData={usersData} />}
 			</div>
 		</>
 	);
