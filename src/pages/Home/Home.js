@@ -17,6 +17,8 @@ import { deleteSingleUser, userDetailsFunction } from "../../services/Apis";
 
 const Home = () => {
 	const [usersData, setUsersData] = useState([]);
+	const [search, setSearch] = useState("");
+	const [gender, setGender] = useState("All");
 
 	console.log(usersData);
 
@@ -34,8 +36,8 @@ const Home = () => {
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
 
-	const getUsersData = async () => {
-		const getData = await userDetailsFunction();
+	const getUsersData = async (name, genderProp) => {
+		const getData = await userDetailsFunction(name, genderProp);
 		setUsersData(getData.data);
 	};
 
@@ -49,13 +51,20 @@ const Home = () => {
 		}
 	};
 
-	// Temporary
+	const searchHandler = (e) => {
+		setSearch(e.target.value);
+	};
+
+	const genderHandler = (e) => {
+		if (e.target.value) setGender(e.target.value);
+	};
+
 	useEffect(() => {
-		getUsersData();
+		getUsersData(search, gender);
 		setTimeout(() => {
 			setShowSpin(false);
 		}, 1200);
-	}, []);
+	}, [search, gender]);
 
 	return (
 		<>
@@ -89,6 +98,7 @@ const Home = () => {
 									placeholder="Search"
 									className="me-2"
 									aria-label="Search"
+									onChange={searchHandler}
 								/>
 								<Button variant="success" className={styles["search_btn"]}>
 									Search
@@ -128,18 +138,21 @@ const Home = () => {
 										label="All"
 										name="status"
 										value="All"
+										onChange={genderHandler}
 										defaultChecked
 									/>
 									<Form.Check
 										type="radio"
 										label="Male"
 										name="status"
+										onChange={genderHandler}
 										value="Male"
 									/>
 									<Form.Check
 										type="radio"
 										label="Female"
 										name="status"
+										onChange={genderHandler}
 										value="Female"
 									/>
 								</div>
