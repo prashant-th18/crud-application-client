@@ -7,8 +7,21 @@ import Badge from "react-bootstrap/Badge";
 import { BASE_URL } from "../../services/helper";
 import styles from "./Table.module.css";
 import { NavLink } from "react-router-dom";
+import { updateStatus } from "../../services/Apis";
+import { ToastContainer, toast } from "react-toastify";
 
 const Tables = (props) => {
+	const statusHandler = async (id, status) => {
+		const response = await updateStatus(id, status);
+		console.log("In Tables", response);
+		if (response.status === 200) {
+			await props.getUsersData();
+			
+			toast.success("Status Updated");
+		} else {
+			toast.error("Something Went Wrong!");
+		}
+	};
 	return (
 		<>
 			<div className={`container`}>
@@ -55,8 +68,20 @@ const Tables = (props) => {
 																	</Badge>
 																</Dropdown.Toggle>
 																<Dropdown.Menu>
-																	<Dropdown.Item>Active</Dropdown.Item>
-																	<Dropdown.Item>InActive</Dropdown.Item>
+																	<Dropdown.Item
+																		onClick={() =>
+																			statusHandler(element._id, "Active")
+																		}
+																	>
+																		Active
+																	</Dropdown.Item>
+																	<Dropdown.Item
+																		onClick={() =>
+																			statusHandler(element._id, "InActive")
+																		}
+																	>
+																		InActive
+																	</Dropdown.Item>
 																</Dropdown.Menu>
 															</Dropdown>
 														</td>
@@ -131,6 +156,7 @@ const Tables = (props) => {
 						</Card>
 					</div>
 				</Row>
+				<ToastContainer />
 			</div>
 		</>
 	);

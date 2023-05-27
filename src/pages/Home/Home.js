@@ -19,6 +19,8 @@ const Home = () => {
 	const [usersData, setUsersData] = useState([]);
 	const [search, setSearch] = useState("");
 	const [gender, setGender] = useState("All");
+	const [status, setStatus] = useState("All");
+	const [sort, setSort] = useState("New");
 
 	console.log(usersData);
 
@@ -36,8 +38,13 @@ const Home = () => {
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
 
-	const getUsersData = async (name, genderProp) => {
-		const getData = await userDetailsFunction(name, genderProp);
+	const getUsersData = async (name, genderProp, usersStatus, getSort) => {
+		const getData = await userDetailsFunction(
+			name,
+			genderProp,
+			usersStatus,
+			getSort
+		);
 		setUsersData(getData.data);
 	};
 
@@ -59,12 +66,16 @@ const Home = () => {
 		if (e.target.value) setGender(e.target.value);
 	};
 
+	const statusHandler = (e) => {
+		if (e.target.value) setStatus(e.target.value);
+	};
+
 	useEffect(() => {
-		getUsersData(search, gender);
+		getUsersData(search, gender, status, sort);
 		setTimeout(() => {
 			setShowSpin(false);
 		}, 1200);
-	}, [search, gender]);
+	}, [search, gender, status, sort]);
 
 	return (
 		<>
@@ -168,8 +179,12 @@ const Home = () => {
 									<i class="fa-solid fa-sort"></i>
 								</Dropdown.Toggle>
 								<Dropdown.Menu>
-									<Dropdown.Item>Old Data</Dropdown.Item>
-									<Dropdown.Item>New Data</Dropdown.Item>
+									<Dropdown.Item onClick={() => setSort("old")}>
+										Old Data
+									</Dropdown.Item>
+									<Dropdown.Item onClick={() => setSort("new")}>
+										New Data
+									</Dropdown.Item>
 								</Dropdown.Menu>
 							</Dropdown>
 						</div>
@@ -184,18 +199,21 @@ const Home = () => {
 										label="All"
 										name="gender"
 										value="All"
+										onChange={statusHandler}
 										defaultChecked
 									/>
 									<Form.Check
 										type="radio"
 										label="Active"
 										name="gender"
+										onChange={statusHandler}
 										value="Active"
 									/>
 									<Form.Check
 										type="radio"
 										label="InActive"
 										name="gender"
+										onChange={statusHandler}
 										value="InActive"
 									/>
 								</div>
@@ -204,7 +222,13 @@ const Home = () => {
 					</div>
 				</div>
 				{showSpin && <Spiner />}
-				{!showSpin && <Tables usersData={usersData} deleteUser={deleteUser} />}
+				{!showSpin && (
+					<Tables
+						getUsersData={getUsersData}
+						usersData={usersData}
+						deleteUser={deleteUser}
+					/>
+				)}
 			</div>
 		</>
 	);
