@@ -7,10 +7,10 @@ export const registerFunction = async (data, header) => {
 	return await commonRequest("POST", `${BASE_URL}/user/register`, data, header);
 };
 
-export const userDetailsFunction = async (name, gender, status, sort) => {
+export const userDetailsFunction = async (name, gender, status, sort, page) => {
 	return await commonRequest(
 		"GET",
-		`${BASE_URL}/details?search=${name}&gender=${gender}&status=${status}&sort=${sort}`,
+		`${BASE_URL}/details?search=${name}&gender=${gender}&status=${status}&sort=${sort}&page=${page}`,
 		""
 	);
 };

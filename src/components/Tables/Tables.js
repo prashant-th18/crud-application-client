@@ -9,6 +9,7 @@ import styles from "./Table.module.css";
 import { NavLink } from "react-router-dom";
 import { updateStatus } from "../../services/Apis";
 import { ToastContainer, toast } from "react-toastify";
+import Paginations from "../Paginations/Paginations";
 
 const Tables = (props) => {
 	const statusHandler = async (id, status) => {
@@ -46,11 +47,11 @@ const Tables = (props) => {
 											return (
 												<>
 													<tr>
-														<td>{index}</td>
+														<td>{index + 1 + (props.page - 1) * 6}</td>
 														<td>{element.fname + " " + element.lname}</td>
 														<td>{element.email}</td>
 														<td>{element.gender === "Male" ? "M" : "F"}</td>
-														<td className={`d-flex aligh-items-center`}>
+														<td className={`d-flex align-items-center`}>
 															<Dropdown className={`text-center`}>
 																<Dropdown.Toggle
 																	className={styles["dropdown_btn"]}
@@ -95,7 +96,11 @@ const Tables = (props) => {
 															<Dropdown>
 																<Dropdown.Toggle
 																	variant="light"
-																	className="action"
+																	className={
+																		styles["action"] +
+																		` ` +
+																		styles["dropdown-toggle"]
+																	}
 																	id="dropdown-basic"
 																>
 																	<i class="fa-solid fa-ellipsis-vertical"></i>
@@ -127,7 +132,6 @@ const Tables = (props) => {
 																			<span>Edit</span>
 																		</NavLink>
 																	</Dropdown.Item>
-																	{/* <div */}
 																	<Dropdown.Item
 																		onClick={() => {
 																			props.deleteUser(element._id);
@@ -139,7 +143,6 @@ const Tables = (props) => {
 																		></i>
 																		&nbsp;
 																		<span>Delete</span>
-																		{/* </div> */}
 																	</Dropdown.Item>
 																</Dropdown.Menu>
 															</Dropdown>
@@ -153,6 +156,13 @@ const Tables = (props) => {
 									)}
 								</tbody>
 							</Table>
+							<Paginations
+								prevButtonHandler={props.prevButtonHandler}
+								nextButtonHandler={props.nextButtonHandler}
+								page={props.page}
+								pageCount={props.pageCount}
+								setPage={props.setPage}
+							/>
 						</Card>
 					</div>
 				</Row>

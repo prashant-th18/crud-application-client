@@ -25,6 +25,8 @@ const Home = () => {
 	const [gender, setGender] = useState("All");
 	const [status, setStatus] = useState("All");
 	const [sort, setSort] = useState("New");
+	const [page, setPage] = useState(1);
+	const [pageCount, setPageCount] = useState(0);
 
 	console.log(usersData);
 
@@ -47,18 +49,21 @@ const Home = () => {
 			name = search,
 			genderProp = gender,
 			usersStatus = status,
-			getSort = sort
+			getSort = sort,
+			getPage = page
 		) => {
 			const getData = await userDetailsFunction(
 				name,
 				genderProp,
 				usersStatus,
-				getSort
+				getSort,
+				page
 			);
 			console.log("In getUsersData", getData);
-			setUsersData(getData.data);
+			setUsersData(getData.data.data);
+			setPageCount(getData.data.Pagination.pageCount);
 		},
-		[search, gender, status, sort]
+		[search, gender, status, sort, page]
 	);
 
 	const deleteUser = async (id) => {
@@ -92,12 +97,28 @@ const Home = () => {
 		}
 	};
 
+	// previousButton Handler
+	const prevButtonHandler = () => {
+		setPage(() => {
+			if (page === 1) return page;
+			return page - 1;
+		});
+	};
+
+	// nextButton Handler
+	const nextButtonHandler = () => {
+		setPage(() => {
+			if (page === pageCount) return page;
+			return page + 1;
+		});
+	};
+
 	useEffect(() => {
-		getUsersData(search, gender, status, sort);
+		getUsersData(search, gender, status, sort, page);
 		setTimeout(() => {
 			setShowSpin(false);
 		}, 1200);
-	}, [getUsersData, search, gender, status, sort]);
+	}, [getUsersData, search, gender, status, sort, page]);
 
 	return (
 		<>
@@ -251,6 +272,11 @@ const Home = () => {
 						getUsersData={getUsersData}
 						usersData={usersData}
 						deleteUser={deleteUser}
+						prevButtonHandler={prevButtonHandler}
+						nextButtonHandler={nextButtonHandler}
+						page={page}
+						pageCount={pageCount}
+						setPage={setPage}
 					/>
 				)}
 			</div>
