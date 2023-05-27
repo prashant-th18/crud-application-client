@@ -23,3 +23,7 @@ export const editSingleUser = async (id, data, header) => {
 		header
 	);
 };
+
+export const deleteSingleUser = async (id) => {
+	return await commonRequest("DELETE", `${BASE_URL}/user/delete/${id}`, {});
+};

@@ -6,10 +6,14 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Tables from "../../components/Tables/Tables";
 import Spiner from "../../components/Spiner/Spiner";
 import { useNavigate } from "react-router-dom";
-import { addData, updateData } from "../../components/Context/ContextProvider";
+import {
+	addData,
+	deleteData,
+	updateData,
+} from "../../components/Context/ContextProvider";
 import Alert from "react-bootstrap/Alert";
-import { NavLink } from "react-router-dom";
-import { userDetailsFunction } from "../../services/Apis";
+import { toast } from "react-toastify";
+import { deleteSingleUser, userDetailsFunction } from "../../services/Apis";
 
 const Home = () => {
 	const [usersData, setUsersData] = useState([]);
@@ -25,6 +29,7 @@ const Home = () => {
 
 	const { userAdd, setUserAdd } = useContext(addData);
 	const { userUpdate, setUserUpdate } = useContext(updateData);
+	const { userDelete, setUserDelete } = useContext(deleteData);
 
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
@@ -32,6 +37,16 @@ const Home = () => {
 	const getUsersData = async () => {
 		const getData = await userDetailsFunction();
 		setUsersData(getData.data);
+	};
+
+	const deleteUser = async (id) => {
+		const response = await deleteSingleUser(id);
+		if (response.status === 200) {
+			await getUsersData();
+			setUserDelete(response.data);
+		} else {
+			toast.error("Something Went Wrong.");
+		}
 	};
 
 	// Temporary
@@ -51,7 +66,12 @@ const Home = () => {
 			)}
 			{userUpdate && (
 				<Alert variant="primary" onClose={() => setUserUpdate("")} dismissible>
-					{`${userUpdate.fname} Successfully Added`}
+					{`${userUpdate.fname} Successfully Updated`}
+				</Alert>
+			)}
+			{userDelete && (
+				<Alert variant="danger" onClose={() => setUserDelete("")} dismissible>
+					{`${userDelete.fname} Successfully Deleted`}
 				</Alert>
 			)}
 			<div className="container">
@@ -171,7 +191,7 @@ const Home = () => {
 					</div>
 				</div>
 				{showSpin && <Spiner />}
-				{!showSpin && <Tables usersData={usersData} />}
+				{!showSpin && <Tables usersData={usersData} deleteUser={deleteUser} />}
 			</div>
 		</>
 	);

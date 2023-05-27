@@ -103,12 +103,18 @@ const Tables = (props) => {
 																		</NavLink>
 																	</Dropdown.Item>
 																	<Dropdown.Item>
-																		<i
-																			className="fa-solid fa-trash"
-																			style={{ color: "red" }}
-																		></i>
-																		&nbsp;
-																		<span>Delete</span>
+																		<div
+																			onClick={() => {
+																				props.deleteUser(element._id);
+																			}}
+																		>
+																			<i
+																				className="fa-solid fa-trash"
+																				style={{ color: "red" }}
+																			></i>
+																			&nbsp;
+																			<span>Delete</span>
+																		</div>
 																	</Dropdown.Item>
 																</Dropdown.Menu>
 															</Dropdown>
@@ -118,7 +124,7 @@ const Tables = (props) => {
 											);
 										})
 									) : (
-										<div className={`no_data text_center`}></div>
+										<div className={`no_data text_center`}>No Data</div>
 									)}
 								</tbody>
 							</Table>
