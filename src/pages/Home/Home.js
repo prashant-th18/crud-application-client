@@ -91,7 +91,7 @@ const Home = () => {
 	const exportHandler = async () => {
 		const response = await usersExportFunction();
 		if (response.status === 200) {
-			window.open(response.data.downloadUrl, "blank");
+			window.open(response.data.downloadUrl, "_blank");
 		} else {
 			toast.error("Something Went Wrong");
 		}
@@ -170,97 +170,102 @@ const Home = () => {
 						</div>
 					</div>
 					{/* Export, Gender, Status */}
-					<div
-						className={
-							styles["filter_div"] +
-							" mt-5 d-flex justify-content-between flex-wrap"
-						}
-					>
-						<div className={styles["export_csv"]}>
-							<Button onClick={exportHandler} className={styles["export_btn"]}>
-								Export To CSV
-							</Button>
-						</div>
-						<div className={styles["filter_gender"]}>
-							<div className={styles["filter"]}>
-								<h3>Filter By Gender</h3>
-								<div
-									className={
-										`d-flex justify-content-between ` + styles["gender"]
-									}
+					<div className={`pb-2 ` + styles["second_row"]}>
+						<div
+							className={
+								styles["filter_div"] +
+								" mt-5 d-flex justify-content-between flex-wrap"
+							}
+						>
+							<div className={styles["export_csv"]}>
+								<Button
+									onClick={exportHandler}
+									className={styles["export_btn"]}
 								>
-									<Form.Check
-										type="radio"
-										label="All"
-										name="status"
-										value="All"
-										onChange={genderHandler}
-										defaultChecked
-									/>
-									<Form.Check
-										type="radio"
-										label="Male"
-										name="status"
-										onChange={genderHandler}
-										value="Male"
-									/>
-									<Form.Check
-										type="radio"
-										label="Female"
-										name="status"
-										onChange={genderHandler}
-										value="Female"
-									/>
+									Export To CSV
+								</Button>
+							</div>
+							<div className={styles["filter_gender"]}>
+								<div className={styles["filter"]}>
+									<h3>Filter By Gender</h3>
+									<div
+										className={
+											`d-flex justify-content-between ` + styles["gender"]
+										}
+									>
+										<Form.Check
+											type="radio"
+											label="All"
+											name="status"
+											value="All"
+											onChange={genderHandler}
+											defaultChecked
+										/>
+										<Form.Check
+											type="radio"
+											label="Male"
+											name="status"
+											onChange={genderHandler}
+											value="Male"
+										/>
+										<Form.Check
+											type="radio"
+											label="Female"
+											name="status"
+											onChange={genderHandler}
+											value="Female"
+										/>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div className={`filter_newold`}>
-							<h3>Sort By Date</h3>
-							<Dropdown className={`text-center`}>
-								<Dropdown.Toggle
-									className={styles["dropdown_btn"]}
-									id="dropdown-basic"
-								>
-									<i class="fa-solid fa-sort"></i>
-								</Dropdown.Toggle>
-								<Dropdown.Menu>
-									<Dropdown.Item onClick={() => setSort("old")}>
-										Old Data
-									</Dropdown.Item>
-									<Dropdown.Item onClick={() => setSort("new")}>
-										New Data
-									</Dropdown.Item>
-								</Dropdown.Menu>
-							</Dropdown>
-						</div>
-						<div className={`filter_status`}>
-							<div className={`status`}>
-								<h3>Filter By Status</h3>
-								<div
-									className={`d-flex justify-content-between status_radio flex-wrap`}
-								>
-									<Form.Check
-										type="radio"
-										label="All"
-										name="gender"
-										value="All"
-										onChange={statusHandler}
-										defaultChecked
-									/>
-									<Form.Check
-										type="radio"
-										label="Active"
-										name="gender"
-										onChange={statusHandler}
-										value="Active"
-									/>
-									<Form.Check
-										type="radio"
-										label="InActive"
-										name="gender"
-										onChange={statusHandler}
-										value="InActive"
-									/>
+							<div className={`filter_newold`}>
+								<h3>Sort By Date</h3>
+								<Dropdown className={`text-center`}>
+									<Dropdown.Toggle
+										className={styles["dropdown_btn"]}
+										id="dropdown-basic"
+									>
+										<i class="fa-solid fa-sort"></i>
+									</Dropdown.Toggle>
+									<Dropdown.Menu>
+										<Dropdown.Item onClick={() => setSort("old")}>
+											Old Data
+										</Dropdown.Item>
+										<Dropdown.Item onClick={() => setSort("new")}>
+											New Data
+										</Dropdown.Item>
+									</Dropdown.Menu>
+								</Dropdown>
+							</div>
+							<div className={`filter_status`}>
+								<div className={`status`}>
+									<h3>Filter By Status</h3>
+									<div
+										className={`d-flex justify-content-between status_radio flex-wrap`}
+									>
+										<Form.Check
+											type="radio"
+											label="All"
+											name="gender"
+											value="All"
+											onChange={statusHandler}
+											defaultChecked
+										/>
+										<Form.Check
+											type="radio"
+											label="Active"
+											name="gender"
+											onChange={statusHandler}
+											value="Active"
+										/>
+										<Form.Check
+											type="radio"
+											label="InActive"
+											name="gender"
+											onChange={statusHandler}
+											value="InActive"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
