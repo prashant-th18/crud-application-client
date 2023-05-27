@@ -13,7 +13,11 @@ import {
 } from "../../components/Context/ContextProvider";
 import Alert from "react-bootstrap/Alert";
 import { toast } from "react-toastify";
-import { deleteSingleUser, userDetailsFunction } from "../../services/Apis";
+import {
+	deleteSingleUser,
+	userDetailsFunction,
+	usersExportFunction,
+} from "../../services/Apis";
 
 const Home = () => {
 	const [usersData, setUsersData] = useState([]);
@@ -77,6 +81,15 @@ const Home = () => {
 
 	const statusHandler = (e) => {
 		if (e.target.value) setStatus(e.target.value);
+	};
+
+	const exportHandler = async () => {
+		const response = await usersExportFunction();
+		if (response.status === 200) {
+			window.open(response.data.downloadUrl, "blank");
+		} else {
+			toast.error("Something Went Wrong");
+		}
 	};
 
 	useEffect(() => {
@@ -143,7 +156,9 @@ const Home = () => {
 						}
 					>
 						<div className={styles["export_csv"]}>
-							<Button className={styles["export_btn"]}>Export To CSV</Button>
+							<Button onClick={exportHandler} className={styles["export_btn"]}>
+								Export To CSV
+							</Button>
 						</div>
 						<div className={styles["filter_gender"]}>
 							<div className={styles["filter"]}>

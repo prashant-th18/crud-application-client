@@ -37,3 +37,7 @@ export const updateStatus = async (id, status) => {
 		status,
 	});
 };
+
+export const usersExportFunction = async () => {
+	return await commonRequest("GET", `${BASE_URL}/userexport`, "");
+};

@@ -127,19 +127,19 @@ const Tables = (props) => {
 																			<span>Edit</span>
 																		</NavLink>
 																	</Dropdown.Item>
-																	<Dropdown.Item>
-																		<div
-																			onClick={() => {
-																				props.deleteUser(element._id);
-																			}}
-																		>
-																			<i
-																				className="fa-solid fa-trash"
-																				style={{ color: "red" }}
-																			></i>
-																			&nbsp;
-																			<span>Delete</span>
-																		</div>
+																	{/* <div */}
+																	<Dropdown.Item
+																		onClick={() => {
+																			props.deleteUser(element._id);
+																		}}
+																	>
+																		<i
+																			className="fa-solid fa-trash"
+																			style={{ color: "red" }}
+																		></i>
+																		&nbsp;
+																		<span>Delete</span>
+																		{/* </div> */}
 																	</Dropdown.Item>
 																</Dropdown.Menu>
 															</Dropdown>
