@@ -16,7 +16,7 @@ const Tables = (props) => {
 		console.log("In Tables", response);
 		if (response.status === 200) {
 			await props.getUsersData();
-			
+
 			toast.success("Status Updated");
 		} else {
 			toast.error("Something Went Wrong!");

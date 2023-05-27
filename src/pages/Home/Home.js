@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import styles from "./Home.module.css";
@@ -38,15 +38,24 @@ const Home = () => {
 	// Spinner will be shown while we fetch the data
 	const [showSpin, setShowSpin] = useState(true);
 
-	const getUsersData = async (name, genderProp, usersStatus, getSort) => {
-		const getData = await userDetailsFunction(
-			name,
-			genderProp,
-			usersStatus,
-			getSort
-		);
-		setUsersData(getData.data);
-	};
+	const getUsersData = useCallback(
+		async (
+			name = search,
+			genderProp = gender,
+			usersStatus = status,
+			getSort = sort
+		) => {
+			const getData = await userDetailsFunction(
+				name,
+				genderProp,
+				usersStatus,
+				getSort
+			);
+			console.log("In getUsersData", getData);
+			setUsersData(getData.data);
+		},
+		[search, gender, status, sort]
+	);
 
 	const deleteUser = async (id) => {
 		const response = await deleteSingleUser(id);
@@ -75,7 +84,7 @@ const Home = () => {
 		setTimeout(() => {
 			setShowSpin(false);
 		}, 1200);
-	}, [search, gender, status, sort]);
+	}, [getUsersData, search, gender, status, sort]);
 
 	return (
 		<>
