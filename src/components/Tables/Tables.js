@@ -152,7 +152,9 @@ const Tables = (props) => {
 											);
 										})
 									) : (
-										<div className={`no_data text_center`}>No Data</div>
+										<div className={`no_data text_center align-items-center`}>
+											No Data
+										</div>
 									)}
 								</tbody>
 							</Table>
